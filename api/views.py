@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .models import School,Principal,VicePrincipal,Course,Classes,Teacher,Student
-from .serializers import SchoolSerializer,PrincipalSerializer,VicePrincipalSerializer,CourseSerializer,ClassesSerializer,TeacherSerializer,StudentSerializer
+from .models import School,Principal,Department,Course,Classes,Teacher,Student,Section
+from .serializers import SchoolSerializer,PrincipalSerializer,DepartmentSerializer,CourseSerializer,ClassesSerializer,TeacherSerializer,StudentSerializer,SectionSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -132,19 +132,19 @@ class CourseApi(APIView):
         info.delete()
         return Response({'msg':'Data successfully deleted'})
     
-class VicePrincipalApi(APIView):
+class DepartmentApi(APIView):
     def get(self,request,*args,**kwargs):
         id = self.kwargs.get('pk',None)
         if id is not None:
-            info = VicePrincipal.objects.get(id=id)
-            serializer = VicePrincipalSerializer(info)
+            info = Department.objects.get(id=id)
+            serializer = DepartmentSerializer(info)
             return Response(serializer.data)
-        info = VicePrincipal.objects.all()
-        serializer = VicePrincipalSerializer(info,many=True)
+        info = Department.objects.all()
+        serializer = DepartmentSerializer(info,many=True)
         return Response(serializer.data)
     
     def post(self,request):
-        serializer = VicePrincipalSerializer(data=request.data)
+        serializer = DepartmentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({'msg':'Data created'},status=status.HTTP_201_CREATED)
@@ -152,8 +152,8 @@ class VicePrincipalApi(APIView):
     
     def put(self,request,*args,**kwargs):
         id = self.kwargs.get('pk',None)
-        info = VicePrincipal.objects.get(id=id)
-        serializer = VicePrincipalSerializer(info,data=request.data)
+        info = Department.objects.get(id=id)
+        serializer = DepartmentSerializer(info,data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({'msg':'Data completely updated'},status=status.HTTP_201_CREATED)
@@ -161,8 +161,8 @@ class VicePrincipalApi(APIView):
 
     def patch(self,request,*args,**kwargs):
         id = self.kwargs.get('pk',None)
-        info = VicePrincipal.objects.get(id=id)
-        serializer = VicePrincipalSerializer(info,data=request.data,partial=True)
+        info = Department.objects.get(id=id)
+        serializer = DepartmentSerializer(info,data=request.data,partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({'msg':'Data partially updated'},status=status.HTTP_201_CREATED)
@@ -170,7 +170,7 @@ class VicePrincipalApi(APIView):
     
     def delete(self,request,*args,**kwargs):
         id = self.kwargs.get('pk',None)
-        info = VicePrincipal.objects.get(id=id)
+        info = Department.objects.get(id=id)
         info.delete()
         return Response({'msg':'Data successfully deleted'})
     
@@ -297,6 +297,48 @@ class StudentApi(APIView):
     def delete(self,request,*args,**kwargs):
         id = self.kwargs.get('pk',None)
         info = Student.objects.get(id=id)
+        info.delete()
+        return Response({'msg':'Data successfully deleted'})
+    
+class SectionApi(APIView):
+    def get(self,request,*args,**kwargs):
+        id = self.kwargs.get('pk',None)
+        if id is not None:
+            info = Section.objects.get(id=id)
+            serializer = SectionSerializer(info)
+            return Response(serializer.data)
+        info = Section.objects.all()
+        serializer = SectionSerializer(info,many=True)
+        return Response(serializer.data)
+    
+    def post(self,request):
+        serializer = SectionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'Data created'},status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self,request,*args,**kwargs):
+        id = self.kwargs.get('pk',None)
+        info = Section.objects.get(id=id)
+        serializer = SectionSerializer(info,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'Data completely updated'},status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self,request,*args,**kwargs):
+        id = self.kwargs.get('pk',None)
+        info = Section.objects.get(id=id)
+        serializer = SectionSerializer(info,data=request.data,partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'Data partially updated'},status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self,request,*args,**kwargs):
+        id = self.kwargs.get('pk',None)
+        info = Section.objects.get(id=id)
         info.delete()
         return Response({'msg':'Data successfully deleted'})
     
